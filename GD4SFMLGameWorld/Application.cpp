@@ -19,7 +19,7 @@ Application::Application()
 {
 	mWindow.setKeyRepeatEnabled(false);
 
-	mFonts.load(FontID::Main, "Media/Sansation.ttf");
+	mFonts.load(FontID::Main, "Media/Wardness.otf");
 	mTextures.load(TextureID::TitleScreen, "Media/Textures/TitleScreen.png");
 	mStatisticText.setFont(mFonts.get(FontID::Main));
 	mStatisticText.setPosition(5.f, 5.f);
