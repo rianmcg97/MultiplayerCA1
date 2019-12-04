@@ -4,7 +4,7 @@
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
-	:mWindow(sf::VideoMode(640, 480), "SFML Hello World With Structure"), mWorld(mWindow), mPlayer(), mFont(), mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0)
+	:mWindow(sf::VideoMode(640, 480), "SFML Hello World With Structure"), mWorld(mWindow), mPlayer(), mPlayer2(), mFont(), mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0)
 {
 	mFont.loadFromFile("Media/Sansation.ttf");
 	mStatisticsText.setFont(mFont);
@@ -38,6 +38,7 @@ void Game::processInput()
 	while (mWindow.pollEvent(event))
 	{
 		mPlayer.handleEvent(event, commands);
+		mPlayer2.handleEvent(event, commands);
 
 		if (event.type == sf::Event::Closed)
 		{
@@ -45,7 +46,7 @@ void Game::processInput()
 		}
 	}
 	mPlayer.handleRealtimeInput(commands);
-
+	mPlayer2.handleRealtimeInput(commands);
 }
 
 void Game::update(sf::Time deltaTime)

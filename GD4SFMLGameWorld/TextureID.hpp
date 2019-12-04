@@ -1,8 +1,9 @@
 #pragma once
 enum class TextureID
 {
-	Eagle,
 	Raptor,
-	Desert,
-	TitleScreen
+	TitleScreen,
+	Enemy,
+	Player,
+	Player2
 };

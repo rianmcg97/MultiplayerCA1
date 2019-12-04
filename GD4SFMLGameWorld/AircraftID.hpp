@@ -1,6 +1,10 @@
 #pragma once
 enum class AircraftID
 {
+	SpaceShip,
+	Raptor,
 	Eagle,
-	Raptor
+	Enemy,
+	Player,
+	Player2
 };

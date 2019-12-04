@@ -6,13 +6,17 @@ TextureID toTextureID(AircraftID type)
 {
 	switch (type)
 	{
-	case AircraftID::Eagle:
-		return TextureID::Eagle;
 
-	case AircraftID::Raptor:
-		return TextureID::Raptor;
+	case AircraftID::Player:
+		return TextureID::Player;
+
+	case AircraftID::Enemy:
+		return TextureID::Enemy;
+
+	case AircraftID::Player2:
+		return TextureID::Player2;
 	}
-	return TextureID::Eagle;
+	return TextureID::Player;
 }
 
 Aircraft::Aircraft(AircraftID type, const TextureHolder& textures) : mType(type), mSprite(textures.get(toTextureID(type)))
@@ -25,8 +29,10 @@ unsigned int Aircraft::getCategory() const
 {
 	switch (mType)
 	{
-	case AircraftID::Eagle:
+	case AircraftID::Player:
 		return static_cast<int>(CategoryID::PlayerAircraft);
+	case AircraftID::Player2:
+		return static_cast<int>(CategoryID::AlliedAircraft);
 
 	default:
 		return static_cast<int>(CategoryID::EnemyAircraft);

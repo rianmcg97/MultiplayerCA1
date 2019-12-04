@@ -12,14 +12,14 @@ Application::Application()
 	, mTextures()
 	, mFonts()
 	, mPlayer()
-	, mStateStack(State::Context(mWindow, mTextures, mFonts, mPlayer))
+	, mStateStack(State::Context(mWindow, mTextures, mFonts, mPlayer, mPlayer2))
 	, mStatisticText()
 	, mStatisticsUpdateTime()
 	, mStatisticsNumFrames(0)
 {
 	mWindow.setKeyRepeatEnabled(false);
 
-	mFonts.load(FontID::Main, "Media/Wardness.otf");
+	mFonts.load(FontID::Main, "Media/moonhouse.ttf");
 	mTextures.load(TextureID::TitleScreen, "Media/Textures/TitleScreen.png");
 	mStatisticText.setFont(mFonts.get(FontID::Main));
 	mStatisticText.setPosition(5.f, 5.f);

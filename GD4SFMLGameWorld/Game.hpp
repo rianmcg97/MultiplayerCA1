@@ -1,7 +1,7 @@
 #pragma once
 #include "World.hpp"
 #include "Player.hpp"
-
+#include "Player2.hpp"
 #include "SFML/System/Time.hpp"
 #include "SFML/Window/Keyboard.hpp"
 #include "SFML/Graphics/Text.hpp"
@@ -29,6 +29,7 @@ private:
 
 	World mWorld;
 	Player mPlayer;
+	Player2 mPlayer2;
 	
 	sf::Font mFont;
 	sf::Text mStatisticsText;

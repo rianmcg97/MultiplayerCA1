@@ -1,4 +1,4 @@
-#include "Player.hpp"
+#include "Player2.hpp"
 #include "Aircraft.hpp"
 #include "CommandQueue.hpp"
 
@@ -13,13 +13,13 @@ struct AircraftMover
 	sf::Vector2f velocity;
 };
 
-Player::Player()
+Player2::Player2()
 {
 	//Set initial key bindings
-	mKeyBinding[sf::Keyboard::A] = ActionID::MoveLeft;
-	mKeyBinding[sf::Keyboard::D] = ActionID::MoveRight;
-	mKeyBinding[sf::Keyboard::W] = ActionID::MoveUp;
-	mKeyBinding[sf::Keyboard::S] = ActionID::MoveDown;
+	mKeyBinding[sf::Keyboard::Left] = ActionID::MoveLeft;
+	mKeyBinding[sf::Keyboard::Right] = ActionID::MoveRight;
+	mKeyBinding[sf::Keyboard::Up] = ActionID::MoveUp;
+	mKeyBinding[sf::Keyboard::Down] = ActionID::MoveDown;
 
 	//Set initial action bindings
 	initializeActions();
@@ -27,21 +27,21 @@ Player::Player()
 	//Assign all categories to the player's aircraft
 	for (auto& pair : mActionBindings)
 	{
-		pair.second.category = static_cast<int>(CategoryID::PlayerAircraft);
+		pair.second.category = static_cast<int>(CategoryID::AlliedAircraft);
 	}
 }
 
 
-void Player::initializeActions()
+void Player2::initializeActions()
 {
-	const float playerSpeed = 200.f;
-	mActionBindings[ActionID::MoveLeft].action = derivedAction<Aircraft>(AircraftMover(-playerSpeed, 0.f));
-	mActionBindings[ActionID::MoveRight].action = derivedAction<Aircraft>(AircraftMover(playerSpeed, 0.f));
-	mActionBindings[ActionID::MoveUp].action = derivedAction<Aircraft>(AircraftMover(0.f, -playerSpeed));
-	mActionBindings[ActionID::MoveDown].action = derivedAction<Aircraft>(AircraftMover(0.f, playerSpeed));
+	const float player2Speed = 200.f;
+	mActionBindings[ActionID::MoveLeft].action = derivedAction<Aircraft>(AircraftMover(-player2Speed, 0.f));
+	mActionBindings[ActionID::MoveRight].action = derivedAction<Aircraft>(AircraftMover(player2Speed, 0.f));
+	mActionBindings[ActionID::MoveUp].action = derivedAction<Aircraft>(AircraftMover(0.f, -player2Speed));
+	mActionBindings[ActionID::MoveDown].action = derivedAction<Aircraft>(AircraftMover(0.f, player2Speed));
 }
 
-void Player::handleEvent(const sf::Event& event, CommandQueue& commands)
+void Player2::handleEvent(const sf::Event& event, CommandQueue& commands)
 {
 	if (event.type == sf::Event::KeyPressed)
 	{
@@ -54,7 +54,7 @@ void Player::handleEvent(const sf::Event& event, CommandQueue& commands)
 	}
 }
 
-void Player::handleRealtimeInput(CommandQueue& commands)
+void Player2::handleRealtimeInput(CommandQueue& commands)
 {
 	//Check all assigned keys and see if they are pressed
 	for (auto pair : mKeyBinding)
@@ -67,7 +67,7 @@ void Player::handleRealtimeInput(CommandQueue& commands)
 	}
 }
 
-void Player::assignKey(ActionID action, sf::Keyboard::Key key)
+void Player2::assignKey(ActionID action, sf::Keyboard::Key key)
 {
 	//Remove all keys that already map to an action
 	for (auto itr = mKeyBinding.begin(); itr != mKeyBinding.end();)
@@ -84,7 +84,7 @@ void Player::assignKey(ActionID action, sf::Keyboard::Key key)
 	mKeyBinding[key] = action;
 }
 
-sf::Keyboard::Key Player::getAssignedKey(ActionID action) const
+sf::Keyboard::Key Player2::getAssignedKey(ActionID action) const
 {
 	for (auto pair : mKeyBinding)
 	{
@@ -96,7 +96,7 @@ sf::Keyboard::Key Player::getAssignedKey(ActionID action) const
 	return sf::Keyboard::Unknown;
 }
 
-bool Player::isRealtimeAction(ActionID action)
+bool Player2::isRealtimeAction(ActionID action)
 {
 	switch (action)
 	{
@@ -110,3 +110,4 @@ bool Player::isRealtimeAction(ActionID action)
 		return false;
 	}
 }
+

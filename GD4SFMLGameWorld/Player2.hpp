@@ -7,13 +7,13 @@
 
 class CommandQueue;
 
-class Player
+class Player2
 {
 public:
-	Player();
+	Player2();
 
 	//PlayerTwo();
-	
+
 	void handleEvent(const sf::Event& event, CommandQueue& commands);
 	void handleRealtimeInput(CommandQueue& commands);
 

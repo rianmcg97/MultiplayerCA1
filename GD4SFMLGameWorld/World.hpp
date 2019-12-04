@@ -35,6 +35,12 @@ private:
 	void adaptPlayerPosition();
 	void adaptPlayerVelocity();
 
+	void adaptPlayer2Position();
+
+	void adaptPlayer2Velocity();
+
+	sf::FloatRect getViewBounds() const;
+
 private:
 	sf::RenderWindow& mWindow;
 	sf::View mCamera;
@@ -48,4 +54,6 @@ private:
 	sf::Vector2f mSpawnPosition;
 	float mScrollSpeed;
 	Aircraft* mPlayerAircraft;
+	Aircraft* mPlayer2Aircraft;
+	Aircraft* mEnemyShip;
 };

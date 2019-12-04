@@ -30,7 +30,7 @@ State::Context State::getContext() const
 	return mContext;
 }
 
-State::Context::Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& font, Player& player) : 
-	window(&window), textures(&textures), fonts(&font), player(&player)
+State::Context::Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& font, Player& player, Player2& player2) : 
+	window(&window), textures(&textures), fonts(&font), player(&player), player2(&player2)
 {
 }
