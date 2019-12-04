@@ -16,7 +16,7 @@ PauseState::PauseState(StateStack& stack, Context context)
 	sf::Vector2f viewSize = context.window->getView().getSize();
 
 	mPausedText.setFont(font);
-	mPausedText.setString("Game Paused");
+	mPausedText.setString("TEST - COMMIT");
 	mPausedText.setCharacterSize(70);
 	centreOrigin(mPausedText);
 	mPausedText.setPosition(0.5f * viewSize.x, 0.4f * viewSize.y);
