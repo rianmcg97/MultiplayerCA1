@@ -7,10 +7,10 @@
 TitleState::TitleState(StateStack& stack, Context context) 
 	:State(stack, context), mText(), mShowText(true), mTextEffectTime(sf::Time::Zero)
 {
-	mBackgroundSprite.setTexture(context.textures->get(TextureID::TitleScreen));
-	mText.setFont(context.fonts->get(FontID::Main));
+	mBackgroundSprite.setTexture(context.textures->get(Textures::TitleScreen));
+	mText.setFont(context.fonts->get(Fonts::Main));
 	mText.setString("Press any key start");
-	centreOrigin(mText);
+	//centreOrigin(mText);
 	mText.setPosition(context.window->getView().getSize() / 2.f);
 }
 
@@ -42,7 +42,7 @@ bool TitleState::handleEvent(const sf::Event& event)
 	if (event.type == sf::Event::KeyPressed)
 	{
 		requestStackPop();
-		requestStackPush(StateID::Menu);
+		requestStackPush(States::Menu);
 	}
 	return true;
 }

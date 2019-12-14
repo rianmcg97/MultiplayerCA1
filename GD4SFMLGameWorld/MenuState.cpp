@@ -11,8 +11,8 @@ MenuState::MenuState(StateStack& stack, Context context)
 	, mOptions()
 	, mOptionIndex(0)
 {
-	sf::Texture& texture = context.textures->get(TextureID::TitleScreen);
-	sf::Font& font = context.fonts->get(FontID::Main);
+	sf::Texture& texture = context.textures->get(Textures::TitleScreen);
+	sf::Font& font = context.fonts->get(Fonts::Main);
 
 	mBackgroundSprite.setTexture(texture);
 
@@ -20,14 +20,14 @@ MenuState::MenuState(StateStack& stack, Context context)
 	sf::Text playOption;
 	playOption.setFont(font);
 	playOption.setString("Play");
-	centreOrigin(playOption);
+	//centreOrigin(playOption);
 	playOption.setPosition(context.window->getView().getSize() / 2.f);
 	mOptions.push_back(playOption);
 
 	sf::Text exitOption;
 	exitOption.setFont(font);
 	exitOption.setString("Exit");
-	centreOrigin(exitOption);
+	//centreOrigin(exitOption);
 	sf::FloatRect bounds = playOption.getLocalBounds();
 	exitOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, bounds.height));
 	mOptions.push_back(exitOption);
@@ -65,7 +65,7 @@ bool MenuState::handleEvent(const sf::Event& event)
 		if (mOptionIndex == static_cast<int>(OptionID::Play))
 		{
 			requestStackPop();
-			requestStackPush(StateID::Game);
+			requestStackPush(States::Game);
 		}
 		else if (mOptionIndex == static_cast<int>(OptionID::Exit))
 		{

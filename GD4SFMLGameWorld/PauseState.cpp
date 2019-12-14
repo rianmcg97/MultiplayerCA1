@@ -12,18 +12,18 @@ PauseState::PauseState(StateStack& stack, Context context)
 	, mPausedText()
 	, mInstructionText()
 {
-	sf::Font& font = context.fonts->get(FontID::Main);
+	sf::Font& font = context.fonts->get(Fonts::Main);
 	sf::Vector2f viewSize = context.window->getView().getSize();
 
 	mPausedText.setFont(font);
 	mPausedText.setString("TEST - COMMIT");
 	mPausedText.setCharacterSize(70);
-	centreOrigin(mPausedText);
+	//centreOrigin(mPausedText);
 	mPausedText.setPosition(0.5f * viewSize.x, 0.4f * viewSize.y);
 
 	mInstructionText.setFont(font);
 	mInstructionText.setString("Press Backspace to return to the main menu");
-	centreOrigin(mInstructionText);
+	//centreOrigin(mInstructionText);
 	mInstructionText.setPosition(0.5f * viewSize.x, 0.6f * viewSize.y);
 }
 
@@ -62,8 +62,8 @@ bool PauseState::handleEvent(const sf::Event& event)
 
 	if (event.key.code == sf::Keyboard::BackSpace)
 	{
-		requestStackClear();
-		requestStackPush(StateID::Menu);
+		//requestStackClear();
+		requestStackPush(States::Menu);
 	}
 	return false;
 }

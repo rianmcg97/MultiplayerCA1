@@ -19,9 +19,9 @@ Application::Application()
 {
 	mWindow.setKeyRepeatEnabled(false);
 
-	mFonts.load(FontID::Main, "Media/moonhouse.ttf");
-	mTextures.load(TextureID::TitleScreen, "Media/Textures/TitleScreen.png");
-	mStatisticText.setFont(mFonts.get(FontID::Main));
+	mFonts.load(Fonts::Main, "Media/moonhouse.ttf");
+	mTextures.load(Textures::TitleScreen, "Media/Textures/TitleScreen.png");
+	mStatisticText.setFont(mFonts.get(Fonts::Main));
 	mStatisticText.setPosition(5.f, 5.f);
 	mStatisticText.setCharacterSize(20);
 

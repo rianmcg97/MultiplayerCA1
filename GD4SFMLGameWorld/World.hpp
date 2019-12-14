@@ -1,59 +1,104 @@
-#pragma once
-
 #include "ResourceHolder.hpp"
 #include "ResourceIdentifiers.hpp"
 #include "SceneNode.hpp"
 #include "SpriteNode.hpp"
 #include "Aircraft.hpp"
-#include "LayerID.hpp"
 #include "CommandQueue.hpp"
+#include "Command.hpp"
+//#include "BloomEffect.hpp"
+//#include <Book/SoundPlayer.hpp>
 
-#include "SFML/System/NonCopyable.hpp"
-#include "SFML/Graphics/View.hpp"
-#include "SFML/Graphics/Texture.hpp"
+#include <SFML/System/NonCopyable.hpp>
+#include <SFML/Graphics/View.hpp>
+#include <SFML/Graphics/Texture.hpp>
 
 #include <array>
+#include <queue>
 
 
-//Forward declaration
-//namespace sf
-//{
-//	class RenderWindow;
-//}
+// Forward declaration
+namespace sf
+{
+	class RenderTarget;
+}
 
 class World : private sf::NonCopyable
 {
 public:
-	explicit World(sf::RenderWindow& window);
-	void update(sf::Time dt);
-	void draw();
-	CommandQueue& getCommandQueue();
+	World(sf::RenderTarget& outputTarget, FontHolder& fonts /*SoundPlayer& sounds*/);
+	void								update(sf::Time dt);
+	void								draw();
+
+	CommandQueue&						getCommandQueue();
+
+	bool 								hasAlivePlayer() const;
+	bool 								hasPlayerReachedEnd() const;
+	bool 								hasPlayer2ReachedEnd() const;
 
 private:
-	void loadTextures();
-	void buildScene();
-	void adaptPlayerPosition();
-	void adaptPlayerVelocity();
+	void								loadTextures();
+	void								adaptPlayerPosition();
+	void								adaptPlayerVelocity();
+	void								adaptPlayer2Position();
+	void								adaptPlayer2Velocity();
+	void								handleCollisions();
+	void								updateSounds();
 
-	void adaptPlayer2Position();
+	void								buildScene();
+	void								addEnemies();
+	void								addEnemy(Aircraft::Type type, float relX, float relY);
+	void								spawnEnemies();
+	void								destroyEntitiesOutsideView();
+	void								guideMissiles();
+	sf::FloatRect						getViewBounds() const;
+	sf::FloatRect						getBattlefieldBounds() const;
 
-	void adaptPlayer2Velocity();
-
-	sf::FloatRect getViewBounds() const;
 
 private:
-	sf::RenderWindow& mWindow;
-	sf::View mCamera;
-	TextureHolder mTextures;
+	enum Layer
+	{
+		Background,
+		LowerAir,
+		UpperAir,
+		LayerCount
+	};
 
-	SceneNode mSceneGraph;
-	std::array<SceneNode*, static_cast<int>(LayerID::LayerCount)> mSceneLayers;
-	CommandQueue mCommandQueue;
+	struct SpawnPoint
+	{
+		SpawnPoint(Aircraft::Type type, float x, float y)
+			: type(type)
+			, x(x)
+			, y(y)
+		{
+		}
 
-	sf::FloatRect mWorldBounds;
-	sf::Vector2f mSpawnPosition;
-	float mScrollSpeed;
-	Aircraft* mPlayerAircraft;
-	Aircraft* mPlayer2Aircraft;
-	Aircraft* mEnemyShip;
+		Aircraft::Type type;
+		float x;
+		float y;
+	};
+
+
+private:
+	sf::RenderTarget&					mTarget;
+	sf::RenderTexture					mSceneTexture;
+	sf::View							mWorldView;
+	TextureHolder						mTextures;
+	FontHolder&							mFonts;
+	//SoundPlayer&						mSounds;
+
+	SceneNode							mSceneGraph;
+	std::array<SceneNode*, LayerCount>	mSceneLayers;
+	CommandQueue						mCommandQueue;
+
+	sf::FloatRect						mWorldBounds;
+	sf::Vector2f						mSpawnPosition;
+	float								mScrollSpeed;
+	Aircraft*							mPlayerAircraft;
+	Aircraft*							mPlayer2Aircraft;
+
+	std::vector<SpawnPoint>				mEnemySpawnPoints;
+	std::vector<Aircraft*>				mActiveEnemies;
+
+	//BloomEffect							mBloomEffect;
 };
+

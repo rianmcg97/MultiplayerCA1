@@ -1,5 +1,6 @@
-#pragma once
-#include "StateID.hpp"
+
+
+#include "StateIdentifiers.hpp"
 #include "ResourceIdentifiers.hpp"
 
 #include <SFML/System/Time.hpp>
@@ -7,14 +8,17 @@
 
 #include <memory>
 
-class Player;
-class Player2;
-class StateStack;
 
 namespace sf
 {
 	class RenderWindow;
 }
+
+class StateStack;
+class Player;
+class Player2;
+class MusicPlayer;
+class SoundPlayer;
 
 class State
 {
@@ -23,33 +27,38 @@ public:
 
 	struct Context
 	{
-		Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& font, Player& player, Player2& player2);
+		Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player,
+			Player2& player2, MusicPlayer& music, SoundPlayer& sounds);
 
-		sf::RenderWindow* window;
-		TextureHolder* textures;
-		FontHolder* fonts;
-		Player* player;
-		Player2* player2;
+		sf::RenderWindow*	window;
+		TextureHolder*		textures;
+		FontHolder*			fonts;
+		Player*				player;
+		Player2*			player2;
+		MusicPlayer*		music;
+		SoundPlayer*		sounds;
 	};
+
 
 public:
 	State(StateStack& stack, Context context);
-	//All parent classes should have a virtual destructor, otherwise we end up with memory leaks - only
-	//the child part of the class will get destructed without the virtual destructor
-	virtual ~State();
+	virtual				~State();
 
-	virtual void draw() = 0;
-	virtual bool update(sf::Time dt) = 0;
-	virtual bool handleEvent(const sf::Event& event) = 0;
+	virtual void		draw() = 0;
+	virtual bool		update(sf::Time dt) = 0;
+	virtual bool		handleEvent(const sf::Event& event) = 0;
+
 
 protected:
-	void requestStackPush(StateID stateID);
-	void requestStackPop();
-	void requestStackClear();
+	void				requestStackPush(States::ID stateID);
+	void				requestStackPop();
+	void				requestStateClear();
 
-	Context getContext() const;
+	Context				getContext() const;
+
 
 private:
-	StateStack* mStack;
-	Context mContext;
+	StateStack*			mStack;
+	Context				mContext;
 };
+

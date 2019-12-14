@@ -1,7 +1,21 @@
 #include "State.hpp"
 #include "StateStack.hpp"
 
-State::State(StateStack& stack, Context context) : mStack(&stack), mContext(context)
+
+State::Context::Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player,
+	Player2& player2, MusicPlayer& music, SoundPlayer& sounds)
+	: window(&window)
+	, textures(&textures)
+	, fonts(&fonts)
+	, player(&player)
+	, music(&music)
+	, sounds(&sounds)
+{
+}
+
+State::State(StateStack& stack, Context context)
+	: mStack(&stack)
+	, mContext(context)
 {
 }
 
@@ -9,8 +23,7 @@ State::~State()
 {
 }
 
-
-void State::requestStackPush(StateID stateID)
+void State::requestStackPush(States::ID stateID)
 {
 	mStack->pushState(stateID);
 }
@@ -20,7 +33,7 @@ void State::requestStackPop()
 	mStack->popState();
 }
 
-void State::requestStackClear()
+void State::requestStateClear()
 {
 	mStack->clearStates();
 }
@@ -28,9 +41,4 @@ void State::requestStackClear()
 State::Context State::getContext() const
 {
 	return mContext;
-}
-
-State::Context::Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& font, Player& player, Player2& player2) : 
-	window(&window), textures(&textures), fonts(&font), player(&player), player2(&player2)
-{
 }
