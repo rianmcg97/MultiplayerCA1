@@ -1,8 +1,9 @@
-#ifndef BOOK_PROJECTILE_HPP
-#define BOOK_PROJECTILE_HPP
+#pragma once
 
 #include "Entity.hpp"
 #include "ResourceIdentifiers.hpp"
+#include "ProjectileID.hpp"
+#include "CommandQueue.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
 
@@ -10,17 +11,7 @@
 class Projectile : public Entity
 {
 public:
-	enum Type
-	{
-		AlliedBullet,
-		EnemyBullet,
-		Missile,
-		TypeCount
-	};
-
-
-public:
-	Projectile(Type type, const TextureHolder& textures);
+	Projectile(ProjectileID type, const TextureHolder& textures);
 
 	void					guideTowards(sf::Vector2f position);
 	bool					isGuided() const;
@@ -37,9 +28,7 @@ private:
 
 
 private:
-	Type					mType;
+	ProjectileID			mType;
 	sf::Sprite				mSprite;
 	sf::Vector2f			mTargetDirection;
 };
-
-#endif // BOOK_PROJECTILE_HPP

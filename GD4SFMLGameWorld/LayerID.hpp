@@ -1,7 +1,8 @@
 #pragma once
 enum class LayerID
 {
-	Background, 
-	Air,
+	Background,
+	LowerAir,
+	UpperAir,
 	LayerCount
 };

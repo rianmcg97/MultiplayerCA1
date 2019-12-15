@@ -1,19 +1,14 @@
 #include "GameState.hpp"
-//#include <Book/MusicPlayer.hpp>
-
-#include <SFML/Graphics/RenderWindow.hpp>
-
 
 GameState::GameState(StateStack& stack, Context context)
-	: State(stack, context)
-	, mWorld(*context.window, *context.fonts) //*context.sounds)
+	:State(stack, context)
+	, mWorld(*context.window, *context.fonts, *context.sounds)
 	, mPlayer(*context.player)
 	, mPlayer2(*context.player2)
 {
-	mPlayer.setMissionStatus(Player::MissionRunning);
-
-	// Play game theme
-	//context.music->play(Music::MissionTheme);
+	mPlayer.setMissionStatus(MissionStatusID::MissionRunning);
+	mPlayer2.setMissionStatus(MissionStatusID::MissionRunning);
+	context.music->play(MusicID::MissionTheme);
 }
 
 void GameState::draw()
@@ -27,13 +22,19 @@ bool GameState::update(sf::Time dt)
 
 	if (!mWorld.hasAlivePlayer())
 	{
-		mPlayer.setMissionStatus(Player::MissionFailure);
-		requestStackPush(States::GameOver);
+		mPlayer.setMissionStatus(MissionStatusID::MissionFailure);
+		requestStackPush(StateID::GameOver);
 	}
 	else if (mWorld.hasPlayerReachedEnd())
 	{
-		mPlayer.setMissionStatus(Player::MissionSuccess);
-		requestStackPush(States::GameOver);
+		mPlayer.setMissionStatus(MissionStatusID::MissionSuccess);
+		requestStackPush(StateID::GameOver);
+	}
+
+	else if (mWorld.hasPlayer2ReachedEnd())
+	{
+		mPlayer.setMissionStatus(MissionStatusID::MissionSuccess);
+		requestStackPush(StateID::GameOver);
 	}
 
 	CommandQueue& commands = mWorld.getCommandQueue();
@@ -44,13 +45,13 @@ bool GameState::update(sf::Time dt)
 
 bool GameState::handleEvent(const sf::Event& event)
 {
-	// Game input handling
 	CommandQueue& commands = mWorld.getCommandQueue();
 	mPlayer.handleEvent(event, commands);
 
-	// Escape pressed, trigger the pause screen
+	//Pause if esc is pressed
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-		requestStackPush(States::Pause);
-
+	{
+		requestStackPush(StateID::Pause);
+	}
 	return true;
 }

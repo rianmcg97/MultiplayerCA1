@@ -2,8 +2,10 @@
 #include "ResourceHolder.hpp"
 #include "ResourceIdentifiers.hpp"
 #include "Player.hpp"
-#include "StateStack.hpp"
 #include "Player2.hpp"
+#include "StateStack.hpp"
+#include "MusicPlayer.hpp"
+
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -30,6 +32,8 @@ private:
 	FontHolder mFonts;
 	Player mPlayer;
 	Player2 mPlayer2;
+	MusicPlayer mMusic;
+	SoundPlayer mSoundPlayer;
 
 	StateStack mStateStack;
 

@@ -1,11 +1,10 @@
 #include "EmitterNode.hpp"
 #include "ParticleNode.hpp"
-#include "CommandQueue.hpp"
-#include "Command.hpp"
 
+#include <iostream>
 
-EmitterNode::EmitterNode(Particle::Type type)
-	: SceneNode()
+EmitterNode::EmitterNode(ParticleID type)
+	:SceneNode()
 	, mAccumulatedTime(sf::Time::Zero)
 	, mType(type)
 	, mParticleSystem(nullptr)
@@ -20,15 +19,17 @@ void EmitterNode::updateCurrent(sf::Time dt, CommandQueue& commands)
 	}
 	else
 	{
-		// Find particle node with the same type as emitter node
+		//Find particle node that has the same type as me
 		auto finder = [this](ParticleNode& container, sf::Time)
 		{
 			if (container.getParticleType() == mType)
+			{
 				mParticleSystem = &container;
+			}
 		};
 
 		Command command;
-		command.category = Category::ParticleSystem;
+		command.category = static_cast<int>(CategoryID::ParticleSystem);
 		command.action = derivedAction<ParticleNode>(finder);
 
 		commands.push(command);

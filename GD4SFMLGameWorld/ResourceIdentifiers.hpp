@@ -1,8 +1,9 @@
-#ifndef BOOK_RESOURCEIDENTIFIERS_HPP
-#define BOOK_RESOURCEIDENTIFIERS_HPP
+#pragma once
+#include "TextureID.hpp"
+#include "FontID.hpp"
+#include "ShaderID.hpp"
+#include "SoundEffectID.hpp"
 
-
-// Forward declaration of SFML classes
 namespace sf
 {
 	class Texture;
@@ -11,73 +12,10 @@ namespace sf
 	class SoundBuffer;
 }
 
-namespace Textures
-{
-	enum ID
-	{
-		Player,
-		Player2,
-		Enemy,
-		Entities,
-		Jungle,
-		TitleScreen,
-		Buttons,
-		Explosion,
-		Particle,
-		FinishLine,
-	};
-}
-
-namespace Shaders
-{
-	enum ID
-	{
-		BrightnessPass,
-		DownSamplePass,
-		GaussianBlurPass,
-		AddPass,
-	};
-}
-
-namespace Fonts
-{
-	enum ID
-	{
-		Main,
-	};
-}
-
-namespace SoundEffect
-{
-	enum ID
-	{
-		AlliedGunfire,
-		EnemyGunfire,
-		Explosion1,
-		Explosion2,
-		LaunchMissile,
-		CollectPickup,
-		Button,
-	};
-}
-
-namespace Music
-{
-	enum ID
-	{
-		MenuTheme,
-		MissionTheme,
-	};
-}
-
-
-// Forward declaration and a few type definitions
-template <typename Resource, typename Identifier>
+template<typename Resource, typename Identifier>
 class ResourceHolder;
 
-typedef ResourceHolder<sf::Texture, Textures::ID>			TextureHolder;
-typedef ResourceHolder<sf::Font, Fonts::ID>					FontHolder;
-typedef ResourceHolder<sf::Shader, Shaders::ID>				ShaderHolder;
-typedef ResourceHolder<sf::SoundBuffer, SoundEffect::ID>	SoundBufferHolder;
-
-#endif // BOOK_RESOURCEIDENTIFIERS_HPP
+typedef ResourceHolder<sf::Texture, TextureID> TextureHolder;
+typedef ResourceHolder<sf::Font, FontID> FontHolder;
+typedef ResourceHolder<sf::Shader, ShaderID> ShaderHolder;
+typedef ResourceHolder<sf::SoundBuffer, SoundEffectID> SoundBufferHolder;

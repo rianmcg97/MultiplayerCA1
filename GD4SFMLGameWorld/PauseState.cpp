@@ -1,7 +1,7 @@
 #include "PauseState.hpp"
 #include "ResourceHolder.hpp"
 #include "Utility.hpp"
-//
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/View.hpp>
@@ -12,19 +12,25 @@ PauseState::PauseState(StateStack& stack, Context context)
 	, mPausedText()
 	, mInstructionText()
 {
-	sf::Font& font = context.fonts->get(Fonts::Main);
+	sf::Font& font = context.fonts->get(FontID::Main);
 	sf::Vector2f viewSize = context.window->getView().getSize();
 
 	mPausedText.setFont(font);
-	mPausedText.setString("TEST - COMMIT");
+	mPausedText.setString("Game Paused");
 	mPausedText.setCharacterSize(70);
-	//centreOrigin(mPausedText);
+	centreOrigin(mPausedText);
 	mPausedText.setPosition(0.5f * viewSize.x, 0.4f * viewSize.y);
 
 	mInstructionText.setFont(font);
 	mInstructionText.setString("Press Backspace to return to the main menu");
-	//centreOrigin(mInstructionText);
+	centreOrigin(mInstructionText);
 	mInstructionText.setPosition(0.5f * viewSize.x, 0.6f * viewSize.y);
+	getContext().music->setPaused(true);
+}
+
+PauseState::~PauseState()
+{
+	getContext().music->setPaused(false);
 }
 
 void PauseState::draw()
@@ -39,6 +45,8 @@ void PauseState::draw()
 	window.draw(backgroundShape);
 	window.draw(mPausedText);
 	window.draw(mInstructionText);
+
+
 
 }
 
@@ -62,8 +70,8 @@ bool PauseState::handleEvent(const sf::Event& event)
 
 	if (event.key.code == sf::Keyboard::BackSpace)
 	{
-		//requestStackClear();
-		requestStackPush(States::Menu);
+		requestStackClear();
+		requestStackPush(StateID::Menu);
 	}
 	return false;
 }

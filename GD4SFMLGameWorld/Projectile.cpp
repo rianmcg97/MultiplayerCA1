@@ -1,8 +1,8 @@
 #include "Projectile.hpp"
-#include "EmitterNode.hpp"
 #include "DataTables.hpp"
 #include "Utility.hpp"
 #include "ResourceHolder.hpp"
+#include "EmitterNode.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
@@ -10,28 +10,31 @@
 #include <cmath>
 #include <cassert>
 
+#include <iostream>
+
 
 namespace
 {
 	const std::vector<ProjectileData> Table = initializeProjectileData();
 }
 
-Projectile::Projectile(Type type, const TextureHolder& textures)
+Projectile::Projectile(ProjectileID type, const TextureHolder& textures)
 	: Entity(1)
 	, mType(type)
-	, mSprite(textures.get(Table[type].texture), Table[type].textureRect)
+	, mSprite(textures.get(Table[static_cast<int>(type)].texture), Table[static_cast<int>(type)].textureRect)
 	, mTargetDirection()
 {
-	centerOrigin(mSprite);
+	centreOrigin(mSprite);
 
-	// Add particle system for missiles
+	//Add particle system for system
 	if (isGuided())
 	{
-		std::unique_ptr<EmitterNode> smoke(new EmitterNode(Particle::Smoke));
+		std::cout << "IsGuided triggered" << std::endl;
+		std::unique_ptr<EmitterNode> smoke(new EmitterNode(ParticleID::Smoke));
 		smoke->setPosition(0.f, getBoundingRect().height / 2.f);
 		attachChild(std::move(smoke));
 
-		std::unique_ptr<EmitterNode> propellant(new EmitterNode(Particle::Propellant));
+		std::unique_ptr<EmitterNode> propellant(new EmitterNode(ParticleID::Propellant));
 		propellant->setPosition(0.f, getBoundingRect().height / 2.f);
 		attachChild(std::move(propellant));
 
@@ -46,7 +49,7 @@ void Projectile::guideTowards(sf::Vector2f position)
 
 bool Projectile::isGuided() const
 {
-	return mType == Missile;
+	return mType == ProjectileID::Missile;
 }
 
 void Projectile::updateCurrent(sf::Time dt, CommandQueue& commands)
@@ -73,10 +76,10 @@ void Projectile::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) 
 
 unsigned int Projectile::getCategory() const
 {
-	if (mType == EnemyBullet)
-		return Category::EnemyProjectile;
+	if (mType == ProjectileID::EnemyBullet)
+		return static_cast<int>(CategoryID::EnemyProjectile);
 	else
-		return Category::AlliedProjectile;
+		return static_cast<int>(CategoryID::AlliedProjectile);
 }
 
 sf::FloatRect Projectile::getBoundingRect() const
@@ -86,10 +89,10 @@ sf::FloatRect Projectile::getBoundingRect() const
 
 float Projectile::getMaxSpeed() const
 {
-	return Table[mType].speed;
+	return Table[static_cast<int>(mType)].speed;
 }
 
 int Projectile::getDamage() const
 {
-	return Table[mType].damage;
+	return Table[static_cast<int>(mType)].damage;
 }

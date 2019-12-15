@@ -1,44 +1,46 @@
 #include "Aircraft.hpp"
 #include "ResourceHolder.hpp"
-#include "CategoryID.hpp"
 #include "DataTables.hpp"
-#include "CommandQueue.hpp"
 #include "Utility.hpp"
+#include "Pickup.hpp"
+#include "CommandQueue.hpp"
+#include "SoundNode.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
-#include <SFML/Graphics/RenderStates.hpp>
+#include "SFML/Graphics/RenderStates.hpp"
+#include "TextureID.hpp"
+#include "AircraftID.hpp"
+#include "ProjectileID.hpp"
+#include "PickupID.hpp"
 
 #include <cmath>
-
-using namespace std::placeholders;
 
 namespace
 {
 	const std::vector<AircraftData> Table = initializeAircraftData();
 }
 
-//TextureID toTextureID(AircraftID type)
-//{
-//	switch (type)
-//	{
-//
-//	case AircraftID::Player:
-//		return TextureID::Player;
-//
-//	case AircraftID::Enemy:
-//		return TextureID::Enemy;
-//
-//	case AircraftID::Player2:
-//		return TextureID::Player2;
-//	}
-//	return TextureID::Player;
-//}
+TextureID toTextureID(AircraftID type)
+{
+	switch (type)
+	{
+	case AircraftID::Player:
+		return TextureID::Player;
 
-Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& fonts)
-	: Entity(Table[type].hitpoints)
+	case AircraftID::Player2:
+		return TextureID::Player2;
+
+	/*case AircraftID::Enemy:
+		return TextureID::Enemy;*/
+	}
+	return TextureID::Player;
+}
+
+Aircraft::Aircraft(AircraftID type, const TextureHolder& textures, const FontHolder& fonts)
+	: Entity(Table[static_cast<int>(type)].hitpoints)
 	, mType(type)
-	, mSprite(textures.get(Table[type].texture), Table[type].textureRect)
-	, mExplosion(textures.get(Textures::Explosion))
+	, mSprite(textures.get(Table[static_cast<int>(type)].texture), Table[static_cast<int>(type)].textureRect)
+	, mExplosion(textures.get(TextureID::Explosion))
 	, mFireCommand()
 	, mMissileCommand()
 	, mFireCountdown(sf::Time::Zero)
@@ -47,6 +49,7 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 	, mShowExplosion(true)
 	, mPlayedExplosionSound(false)
 	, mSpawnedPickup(false)
+	, mIsMarkedForRemoval(false)
 	, mFireRateLevel(1)
 	, mSpreadLevel(1)
 	, mMissileAmmo(2)
@@ -60,32 +63,32 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 	mExplosion.setNumFrames(16);
 	mExplosion.setDuration(sf::seconds(1));
 
-	centerOrigin(mSprite);
-	centerOrigin(mExplosion);
+	centreOrigin(mSprite);
+	centreOrigin(mExplosion);
 
-	mFireCommand.category = Category::SceneAirLayer;
+	mFireCommand.category = static_cast<int>(CategoryID::SceneAirLayer);
 	mFireCommand.action = [this, &textures](SceneNode& node, sf::Time)
 	{
 		createBullets(node, textures);
 	};
 
-	mMissileCommand.category = Category::SceneAirLayer;
+	mMissileCommand.category = static_cast<int>(CategoryID::SceneAirLayer);
 	mMissileCommand.action = [this, &textures](SceneNode& node, sf::Time)
 	{
-		createProjectile(node, Projectile::Missile, 0.f, 0.5f, textures);
+		createProjectile(node, ProjectileID::Missile, 0.f, 0.5f, textures);
 	};
 
-	//mDropPickupCommand.category = Category::SceneAirLayer;
-	//mDropPickupCommand.action = [this, &textures](SceneNode& node, sf::Time)
-	//{
-	//	createPickup(node, textures);
-	//};
+	mDropPickupCommand.category = static_cast<int>(CategoryID::SceneAirLayer);
+	mDropPickupCommand.action = [this, &textures](SceneNode& node, sf::Time)
+	{
+		createPickup(node, textures);
+	};
 
 	std::unique_ptr<TextNode> healthDisplay(new TextNode(fonts, ""));
 	mHealthDisplay = healthDisplay.get();
 	attachChild(std::move(healthDisplay));
 
-	if (getCategory() == Category::PlayerAircraft)
+	if (getCategory() == (static_cast<int>(CategoryID::PlayerAircraft)))
 	{
 		std::unique_ptr<TextNode> missileDisplay(new TextNode(fonts, ""));
 		missileDisplay->setPosition(0, 70);
@@ -96,19 +99,6 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 	updateTexts();
 }
 
-unsigned int Aircraft::getCategory() const
-{
-	switch (mType)
-	{
-	case Aircraft::Player:
-		return static_cast<int>(CategoryID::PlayerAircraft);
-	case Aircraft::Player2:
-		return static_cast<int>(CategoryID::AlliedAircraft);
-
-	default:
-		return static_cast<int>(CategoryID::EnemyAircraft);
-	}
-}
 
 void Aircraft::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -120,24 +110,20 @@ void Aircraft::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) co
 
 void Aircraft::updateCurrent(sf::Time dt, CommandQueue& commands)
 {
-	// Update texts and roll animation
-	updateTexts();
-	updateRollAnimation();
-
 	// Entity has been destroyed: Possibly drop pickup, mark for removal
 	if (isDestroyed())
 	{
-		//checkPickupDrop(commands);
+		checkPickupDrop(commands);
 		mExplosion.update(dt);
-
-		// Play explosion sound only once
-		/*if (!mPlayedExplosionSound)
+		//mIsMarkedForRemoval = true;
+		//Play explosion sound
+		if (!mPlayedExplosionSound)
 		{
-			SoundEffect::ID soundEffect = (randomInt(2) == 0) ? SoundEffect::Explosion1 : SoundEffect::Explosion2;
-			playLocalSound(commands, soundEffect);
+			SoundEffectID soundEffect = (randomInt(2) == 0) ? SoundEffectID::Explosion1 : SoundEffectID::Explosion2;
+			playerLocalSound(commands, soundEffect);
 
 			mPlayedExplosionSound = true;
-		}*/
+		}
 		return;
 	}
 
@@ -147,6 +133,19 @@ void Aircraft::updateCurrent(sf::Time dt, CommandQueue& commands)
 	// Update enemy movement pattern; apply velocity
 	updateMovementPattern(dt);
 	Entity::updateCurrent(dt, commands);
+
+	// Update texts
+	updateTexts();
+	updateRollAnimation();
+}
+
+
+unsigned int Aircraft::getCategory() const
+{
+	if (isAllied())
+		return static_cast<int>(CategoryID::PlayerAircraft);
+	else
+		return static_cast<int>(CategoryID::EnemyAircraft);
 }
 
 sf::FloatRect Aircraft::getBoundingRect() const
@@ -159,20 +158,14 @@ bool Aircraft::isMarkedForRemoval() const
 	return isDestroyed() && (mExplosion.isFinished() || !mShowExplosion);
 }
 
-void Aircraft::remove()
-{
-	Entity::remove();
-	mShowExplosion = false;
-}
-
 bool Aircraft::isAllied() const
 {
-	return mType == Player;
+	return mType == AircraftID::Player2;
 }
 
 float Aircraft::getMaxSpeed() const
 {
-	return Table[mType].speed;
+	return Table[static_cast<int>(mType)].speed;
 }
 
 void Aircraft::increaseFireRate()
@@ -187,15 +180,29 @@ void Aircraft::increaseSpread()
 		++mSpreadLevel;
 }
 
-//void Aircraft::collectMissiles(unsigned int count)
-//{
-//	mMissileAmmo += count;
-//}
+void Aircraft::collectMissiles(unsigned int count)
+{
+	mMissileAmmo += count;
+}
+
+void Aircraft::playerLocalSound(CommandQueue& commands, SoundEffectID effect)
+{
+	sf::Vector2f worldPosition = getWorldPosition();
+
+	Command command;
+	command.category = static_cast<int>(CategoryID::SoundEffect);
+	command.action = derivedAction<SoundNode>(
+		[effect, worldPosition](SoundNode& node, sf::Time)
+	{
+		node.playSound(effect, worldPosition);
+	});
+	commands.push(command);
+}
 
 void Aircraft::fire()
 {
 	// Only ships with fire interval != 0 are able to fire
-	if (Table[mType].fireInterval != sf::Time::Zero)
+	if (Table[static_cast<int>(mType)].fireInterval != sf::Time::Zero)
 		mIsFiring = true;
 }
 
@@ -208,25 +215,10 @@ void Aircraft::launchMissile()
 	}
 }
 
-//void Aircraft::playLocalSound(CommandQueue& commands, SoundEffect::ID effect)
-//{
-//	sf::Vector2f worldPosition = getWorldPosition();
-//
-//	Command command;
-//	command.category = Category::SoundEffect;
-//	command.action = derivedAction<SoundNode>(
-//		[effect, worldPosition](SoundNode& node, sf::Time)
-//	{
-//		node.playSound(effect, worldPosition);
-//	});
-//
-//	commands.push(command);
-//}
-
 void Aircraft::updateMovementPattern(sf::Time dt)
 {
 	// Enemy airplane: Movement pattern
-	const std::vector<Direction>& directions = Table[mType].directions;
+	const std::vector<Direction>& directions = Table[static_cast<int>(mType)].directions;
 	if (!directions.empty())
 	{
 		// Moved long enough in current direction: Change direction
@@ -247,13 +239,12 @@ void Aircraft::updateMovementPattern(sf::Time dt)
 	}
 }
 
-//void Aircraft::checkPickupDrop(CommandQueue& commands)
-//{
-//	if (!isAllied() && randomInt(3) == 0 && !mSpawnedPickup)
-//		commands.push(mDropPickupCommand);
-//
-//	mSpawnedPickup = true;
-//}
+void Aircraft::checkPickupDrop(CommandQueue& commands)
+{
+	if (!isAllied() && randomInt(3) == 0 && !mSpawnedPickup)
+		commands.push(mDropPickupCommand);
+	mSpawnedPickup = true;
+}
 
 void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands)
 {
@@ -266,9 +257,8 @@ void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands)
 	{
 		// Interval expired: We can fire a new bullet
 		commands.push(mFireCommand);
-		//playLocalSound(commands, isAllied() ? SoundEffect::AlliedGunfire : SoundEffect::EnemyGunfire);
-
-		mFireCountdown += Table[mType].fireInterval / (mFireRateLevel + 1.f);
+		playerLocalSound(commands, isAllied() ? SoundEffectID::AlliedGunfire : SoundEffectID::EnemyGunfire);
+		mFireCountdown += Table[static_cast<int>(mType)].fireInterval / (mFireRateLevel + 1.f);
 		mIsFiring = false;
 	}
 	else if (mFireCountdown > sf::Time::Zero)
@@ -282,15 +272,14 @@ void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands)
 	if (mIsLaunchingMissile)
 	{
 		commands.push(mMissileCommand);
-		//playLocalSound(commands, SoundEffect::LaunchMissile);
-
+		playerLocalSound(commands, SoundEffectID::LaunchMissile);
 		mIsLaunchingMissile = false;
 	}
 }
 
 void Aircraft::createBullets(SceneNode& node, const TextureHolder& textures) const
 {
-	Projectile::Type type = isAllied() ? Projectile::AlliedBullet : Projectile::EnemyBullet;
+	ProjectileID type = isAllied() ? ProjectileID::AlliedBullet : ProjectileID::EnemyBullet;
 
 	switch (mSpreadLevel)
 	{
@@ -311,7 +300,7 @@ void Aircraft::createBullets(SceneNode& node, const TextureHolder& textures) con
 	}
 }
 
-void Aircraft::createProjectile(SceneNode& node, Projectile::Type type, float xOffset, float yOffset, const TextureHolder& textures) const
+void Aircraft::createProjectile(SceneNode& node, ProjectileID type, float xOffset, float yOffset, const TextureHolder& textures) const
 {
 	std::unique_ptr<Projectile> projectile(new Projectile(type, textures));
 
@@ -324,30 +313,25 @@ void Aircraft::createProjectile(SceneNode& node, Projectile::Type type, float xO
 	node.attachChild(std::move(projectile));
 }
 
-//void Aircraft::createPickup(SceneNode& node, const TextureHolder& textures) const
-//{
-//	auto type = static_cast<Pickup::Type>(randomInt(Pickup::TypeCount));
-//
-//	std::unique_ptr<Pickup> pickup(new Pickup(type, textures));
-//	pickup->setPosition(getWorldPosition());
-//	pickup->setVelocity(0.f, 1.f);
-//	node.attachChild(std::move(pickup));
-//}
+void Aircraft::createPickup(SceneNode& node, const TextureHolder& textures) const
+{
+	auto type = static_cast<PickupID>(randomInt(static_cast<int>(PickupID::TypeCount)));
+
+	std::unique_ptr<Pickup> pickup(new Pickup(type, textures));
+	pickup->setPosition(getWorldPosition());
+	pickup->setVelocity(0.f, 1.f);
+	node.attachChild(std::move(pickup));
+}
 
 void Aircraft::updateTexts()
 {
-	// Display hitpoints
-	if (isDestroyed())
-		mHealthDisplay->setString("");
-	else
-		mHealthDisplay->setString(toString(getHitpoints()) + " HP");
+	mHealthDisplay->setString(toString(getHitpoints()) + " HP");
 	mHealthDisplay->setPosition(0.f, 50.f);
 	mHealthDisplay->setRotation(-getRotation());
 
-	// Display missiles, if available
 	if (mMissileDisplay)
 	{
-		if (mMissileAmmo == 0 || isDestroyed())
+		if (mMissileAmmo == 0)
 			mMissileDisplay->setString("");
 		else
 			mMissileDisplay->setString("M: " + toString(mMissileAmmo));
@@ -356,9 +340,9 @@ void Aircraft::updateTexts()
 
 void Aircraft::updateRollAnimation()
 {
-	if (Table[mType].hasRollAnimation)
+	if (Table[static_cast<int>(mType)].hasRollAnimation)
 	{
-		sf::IntRect textureRect = Table[mType].textureRect;
+		sf::IntRect textureRect = Table[static_cast<int>(mType)].textureRect;
 
 		// Roll left: Texture rect offset once
 		if (getVelocity().x < 0.f)

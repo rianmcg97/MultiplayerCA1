@@ -2,12 +2,9 @@
 
 #include <cassert>
 
-
 Entity::Entity(int hitpoints)
-	: mVelocity()
-	, mHitpoints(hitpoints)
-{
-}
+	: mVelocity(), mHitpoints(hitpoints)
+{}
 
 void Entity::setVelocity(sf::Vector2f velocity)
 {
@@ -18,11 +15,6 @@ void Entity::setVelocity(float vx, float vy)
 {
 	mVelocity.x = vx;
 	mVelocity.y = vy;
-}
-
-sf::Vector2f Entity::getVelocity() const
-{
-	return mVelocity;
 }
 
 void Entity::accelerate(sf::Vector2f velocity)
@@ -36,6 +28,11 @@ void Entity::accelerate(float vx, float vy)
 	mVelocity.y += vy;
 }
 
+sf::Vector2f Entity::getVelocity() const
+{
+	return mVelocity;
+}
+
 int Entity::getHitpoints() const
 {
 	return mHitpoints;
@@ -44,25 +41,19 @@ int Entity::getHitpoints() const
 void Entity::repair(int points)
 {
 	assert(points > 0);
-
 	mHitpoints += points;
+
 }
 
 void Entity::damage(int points)
 {
 	assert(points > 0);
-
 	mHitpoints -= points;
 }
 
 void Entity::destroy()
 {
 	mHitpoints = 0;
-}
-
-void Entity::remove()
-{
-	destroy();
 }
 
 bool Entity::isDestroyed() const

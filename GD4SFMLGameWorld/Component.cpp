@@ -5,7 +5,7 @@ GUI::Component::Component()
 {
 }
 
-GUI::Component::~Component()	
+GUI::Component::~Component()
 {
 }
 

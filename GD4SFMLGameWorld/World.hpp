@@ -1,104 +1,100 @@
+#pragma once
+
 #include "ResourceHolder.hpp"
 #include "ResourceIdentifiers.hpp"
 #include "SceneNode.hpp"
 #include "SpriteNode.hpp"
 #include "Aircraft.hpp"
+#include "LayerID.hpp"
 #include "CommandQueue.hpp"
-#include "Command.hpp"
-//#include "BloomEffect.hpp"
-//#include <Book/SoundPlayer.hpp>
+#include "AircraftID.hpp"
+#include "Pickup.hpp"
+#include "PostEffect.hpp"
+#include "BloomEffect.hpp"
+#include "SoundNode.hpp"
+#include "SoundPlayer.hpp"
 
-#include <SFML/System/NonCopyable.hpp>
-#include <SFML/Graphics/View.hpp>
-#include <SFML/Graphics/Texture.hpp>
+#include "SFML/System/NonCopyable.hpp"
+#include "SFML/Graphics/View.hpp"
+#include "SFML/Graphics/Texture.hpp"
 
 #include <array>
-#include <queue>
 
 
-// Forward declaration
+//Forward declaration
 namespace sf
 {
 	class RenderTarget;
 }
 
+
 class World : private sf::NonCopyable
 {
 public:
-	World(sf::RenderTarget& outputTarget, FontHolder& fonts /*SoundPlayer& sounds*/);
-	void								update(sf::Time dt);
-	void								draw();
-
-	CommandQueue&						getCommandQueue();
-
-	bool 								hasAlivePlayer() const;
-	bool 								hasPlayerReachedEnd() const;
-	bool 								hasPlayer2ReachedEnd() const;
-
-private:
-	void								loadTextures();
-	void								adaptPlayerPosition();
-	void								adaptPlayerVelocity();
-	void								adaptPlayer2Position();
-	void								adaptPlayer2Velocity();
-	void								handleCollisions();
-	void								updateSounds();
-
-	void								buildScene();
-	void								addEnemies();
-	void								addEnemy(Aircraft::Type type, float relX, float relY);
-	void								spawnEnemies();
-	void								destroyEntitiesOutsideView();
-	void								guideMissiles();
-	sf::FloatRect						getViewBounds() const;
-	sf::FloatRect						getBattlefieldBounds() const;
-
+	explicit World(sf::RenderTarget& outputTarget, FontHolder& fonts, SoundPlayer& sounds);
+	void update(sf::Time dt);
+	void draw();
+	CommandQueue& getCommandQueue();
+	bool hasAlivePlayer() const;
+	bool hasPlayerReachedEnd() const;
+	bool hasAlivePlayer2() const;
+	bool hasPlayer2ReachedEnd() const;
+	void updateSounds();
 
 private:
-	enum Layer
-	{
-		Background,
-		LowerAir,
-		UpperAir,
-		LayerCount
-	};
+	void loadTextures();
+	void buildScene();
+	void adaptPlayerPosition();
+	void adaptPlayerVelocity();
+	void adaptPlayer2Position();
+	void adaptPlayer2Velocity();
+	void handleCollisions();
+
+	/*void spawnEnemies();
+	void addEnemies();
+	void addEnemy(AircraftID type, float relX, float relY);*/
+
+	sf::FloatRect getBattlefieldBounds() const;
+	sf::FloatRect getViewBounds() const;
+
+	void destroyEntitiesOutsideView();
+
+	void guideMissiles();
 
 	struct SpawnPoint
 	{
-		SpawnPoint(Aircraft::Type type, float x, float y)
+		SpawnPoint(AircraftID type, float x, float y)
 			: type(type)
 			, x(x)
 			, y(y)
 		{
 		}
 
-		Aircraft::Type type;
+		AircraftID type;
 		float x;
 		float y;
 	};
 
-
 private:
-	sf::RenderTarget&					mTarget;
-	sf::RenderTexture					mSceneTexture;
-	sf::View							mWorldView;
-	TextureHolder						mTextures;
-	FontHolder&							mFonts;
-	//SoundPlayer&						mSounds;
+	sf::RenderTarget& mTarget;
+	sf::RenderTexture mSceneTexture;
+	sf::View mCamera;
+	TextureHolder mTextures;
+	FontHolder& mFonts;
+	SoundPlayer& mSounds;
 
-	SceneNode							mSceneGraph;
-	std::array<SceneNode*, LayerCount>	mSceneLayers;
-	CommandQueue						mCommandQueue;
+	SceneNode mSceneGraph;
+	std::array<SceneNode*, static_cast<int>(LayerID::LayerCount)> mSceneLayers;
+	CommandQueue mCommandQueue;
 
-	sf::FloatRect						mWorldBounds;
-	sf::Vector2f						mSpawnPosition;
-	float								mScrollSpeed;
-	Aircraft*							mPlayerAircraft;
-	Aircraft*							mPlayer2Aircraft;
+	sf::FloatRect mWorldBounds;
+	sf::Vector2f mSpawnPosition;
+	float mScrollSpeed;
+	Aircraft* mPlayerAircraft;
+	Aircraft* mPlayer2Aircraft;
 
-	std::vector<SpawnPoint>				mEnemySpawnPoints;
-	std::vector<Aircraft*>				mActiveEnemies;
+	std::vector<SpawnPoint>	mEnemySpawnPoints;
+	std::vector<Aircraft*> mActiveEnemies;
 
-	//BloomEffect							mBloomEffect;
+	BloomEffect	mBloomEffect;
 };
-
