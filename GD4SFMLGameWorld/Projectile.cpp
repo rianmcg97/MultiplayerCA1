@@ -62,7 +62,7 @@ void Projectile::updateCurrent(sf::Time dt, CommandQueue& commands)
 		newVelocity *= getMaxSpeed();
 		float angle = std::atan2(newVelocity.x, newVelocity.y);
 
-		setRotation(toDegree(angle) + 90.f);
+		//setRotation(toDegree(angle) + 90.f);
 		setVelocity(newVelocity);
 	}
 

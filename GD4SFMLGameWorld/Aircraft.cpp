@@ -225,8 +225,9 @@ void Aircraft::launchMissile()
 	if (mMissileAmmo > 0)
 	{
 		mIsLaunchingMissile = true;
-		--mMissileAmmo;
+		//mMissileAmmo;
 	}
+
 }
 
 void Aircraft::updateMovementPattern(sf::Time dt)
@@ -319,11 +320,12 @@ void Aircraft::createProjectile(SceneNode& node, ProjectileID type, float xOffse
 	std::unique_ptr<Projectile> projectile(new Projectile(type, textures));
 
 	sf::Vector2f offset(xOffset * mSprite.getGlobalBounds().width, yOffset * mSprite.getGlobalBounds().height);
-	sf::Vector2f velocity(0, projectile->getMaxSpeed());
+	sf::Vector2f velocity(projectile->getMaxSpeed(), 0);
 
-	float sign1 = isAllied1() ? -1.f : +1.f;
+	float sign1 = +1.f;
 	projectile->setPosition(getWorldPosition() + offset * sign1);
 	projectile->setVelocity(velocity * sign1);
+	projectile->setRotation(90);
 	node.attachChild(std::move(projectile));
 
 }
