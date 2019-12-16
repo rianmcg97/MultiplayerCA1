@@ -304,18 +304,18 @@ void Aircraft::createBullets(SceneNode& node, const TextureHolder& textures) con
 	switch (mSpreadLevel)
 	{
 	case 1:
-		createProjectile(node, type, 0.0f, 0.5f, textures);
+		createProjectile(node, type, 0.0f, 0.01f, textures);
 		break;
 
 	case 2:
-		createProjectile(node, type, -0.33f, 0.33f, textures);
-		createProjectile(node, type, +0.33f, 0.33f, textures);
+		createProjectile(node, type, -0.33f, 0.01f, textures);
+		createProjectile(node, type, +0.33f, 0.01f, textures);
 		break;
 
 	case 3:
-		createProjectile(node, type, -0.5f, 0.33f, textures);
-		createProjectile(node, type, 0.0f, 0.5f, textures);
-		createProjectile(node, type, +0.5f, 0.33f, textures);
+		createProjectile(node, type, -0.5f, 0.01f, textures);
+		createProjectile(node, type, 0.0f, 0.01f, textures);
+		createProjectile(node, type, +0.5f, 0.01f, textures);
 		break;
 	}
 }
@@ -324,7 +324,7 @@ void Aircraft::createProjectile(SceneNode& node, ProjectileID type, float xOffse
 {
 	std::unique_ptr<Projectile> projectile(new Projectile(type, textures));
 
-	sf::Vector2f offset(xOffset * mSprite.getGlobalBounds().width, yOffset * mSprite.getGlobalBounds().height);
+	sf::Vector2f offset(xOffset * mSprite.getGlobalBounds().width, 0.01f);
 	sf::Vector2f velocity(projectile->getMaxSpeed(), 0);
 
 	float sign1 = +1.f;
