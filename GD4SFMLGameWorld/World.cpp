@@ -1,7 +1,6 @@
 #include "World.hpp"
 #include "ParticleID.hpp"
 #include "ParticleNode.hpp"
-
 #include <SFML/Graphics/RenderWindow.hpp>
 
 
@@ -261,7 +260,7 @@ void World::buildScene()
 
 	std::unique_ptr<Aircraft> player2(new Aircraft(AircraftID::Player, mTextures, mFonts));
 	mPlayer2Aircraft = player2.get();
-	mPlayer2Aircraft->setPosition(mSpawnPosition2);
+	mPlayer2Aircraft->setPosition(mSpawnPosition2 + sf::Vector2f(50, 50));
 	mPlayer2Aircraft->setRotation(90);
 	mPlayer2Aircraft->setScale(0.8, 0.8);
 	mSceneLayers[static_cast<int>(LayerID::UpperAir)]->attachChild(std::move(player2));
