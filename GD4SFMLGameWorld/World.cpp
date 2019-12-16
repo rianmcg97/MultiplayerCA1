@@ -202,9 +202,12 @@ void World::handleCollisions()
 			auto& aircraft = static_cast<Aircraft&>(*pair.first);
 			auto& projectile = static_cast<Projectile&>(*pair.second);
 
-			// Apply projectile damage to aircraft, destroy projectile
+			//Apply projectile damage to aircraft, destroy projectile
+
 			aircraft.damage(projectile.getDamage());
 			projectile.destroy();
+
+			//AAAA
 		}
 	}
 }
@@ -255,14 +258,14 @@ void World::buildScene()
 	mPlayerAircraft = player.get();
 	mPlayerAircraft->setPosition(mSpawnPosition + sf::Vector2f(-50, -50));
 	mPlayerAircraft->setRotation(90);
-	mPlayerAircraft->setScale(0.8, 0.8);
+	mPlayerAircraft->setScale(0.8f, 0.8f);
 	mSceneLayers[static_cast<int>(LayerID::UpperAir)]->attachChild(std::move(player));
 
-	std::unique_ptr<Aircraft> player2(new Aircraft(AircraftID::Player2, mTextures, mFonts));
+	std::unique_ptr<Aircraft> player2(new Aircraft(AircraftID::Player, mTextures, mFonts));
 	mPlayer2Aircraft = player2.get();
 	mPlayer2Aircraft->setPosition(mSpawnPosition2 + sf::Vector2f(50, 50));
 	mPlayer2Aircraft->setRotation(90);
-	mPlayer2Aircraft->setScale(0.8, 0.8);
+	mPlayer2Aircraft->setScale(0.8f, 0.8f);
 	mSceneLayers[static_cast<int>(LayerID::UpperAir)]->attachChild(std::move(player2));
 
 	//addEnemies();

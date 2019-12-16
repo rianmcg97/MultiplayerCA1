@@ -38,7 +38,7 @@ private:
 	void createProjectile(SceneNode& node, ProjectileID type, float xOffset, float yOffset, const TextureHolder& textures) const;
 
 	void createPickup(SceneNode& node, const TextureHolder& textures) const;
-	void checkPickupDrop(CommandQueue& commands);
+	//void checkPickupDrop(CommandQueue& commands);
 	//void updateRollAnimation();
 
 private:
