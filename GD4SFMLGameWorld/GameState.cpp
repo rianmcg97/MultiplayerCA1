@@ -27,6 +27,11 @@ bool GameState::update(sf::Time dt)
 		mPlayer.setMissionStatus(MissionStatusID::MissionFailure);
 		requestStackPush(StateID::GameOver);
 	}
+	if (!mWorld.hasAlivePlayer2())
+	{
+		mPlayer2.setMissionStatus(MissionStatusID::MissionFailure);
+		requestStackPush(StateID::GameOver);
+	}
 	else if (mWorld.hasPlayerReachedEnd())
 	{
 		mPlayer.setMissionStatus(MissionStatusID::MissionSuccess);
