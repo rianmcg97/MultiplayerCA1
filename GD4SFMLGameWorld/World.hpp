@@ -52,7 +52,8 @@ private:
 
 	/*void spawnEnemies();
 	void addEnemies();
-	void addEnemy(AircraftID type, float relX, float relY);*/
+	void 
+	(AircraftID type, float relX, float relY);*/
 
 	sf::FloatRect getBattlefieldBounds() const;
 	sf::FloatRect getViewBounds() const;
