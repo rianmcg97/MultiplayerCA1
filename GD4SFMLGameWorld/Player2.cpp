@@ -39,7 +39,7 @@ Player2::Player2() : mCurrentMissionStatus(MissionStatusID::MissionRunning)
 
 	// Assign all categories to player's aircraft
 	for (auto& pair : mActionBinding)
-		pair.second.category = static_cast<int>(CategoryID::PlayerAircraft);
+		pair.second.category = static_cast<int>(CategoryID::Player2Aircraft);
 }
 
 void Player2::handleEvent(const sf::Event& event, CommandQueue& commands)

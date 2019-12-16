@@ -18,7 +18,8 @@ public:
 	float getMaxSpeed() const;
 	void fire();
 	void launchMissile();
-	bool isAllied() const;
+	bool isAllied1() const;
+	bool isAllied2() const;
 	void increaseFireRate();
 	void increaseSpread();
 	void collectMissiles(unsigned int count);
@@ -38,7 +39,7 @@ private:
 
 	void createPickup(SceneNode& node, const TextureHolder& textures) const;
 	void checkPickupDrop(CommandQueue& commands);
-	void updateRollAnimation();
+	//void updateRollAnimation();
 
 private:
 	AircraftID mType;

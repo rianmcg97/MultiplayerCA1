@@ -10,19 +10,20 @@
 std::vector<AircraftData> initializeAircraftData()
 {
 	std::vector<AircraftData> data(static_cast<int>(AircraftID::TypeCount));
+
 	data[static_cast<int>(AircraftID::Player)].hitpoints = 100;
 	data[static_cast<int>(AircraftID::Player)].speed = 200.f;
 	data[static_cast<int>(AircraftID::Player)].fireInterval = sf::seconds(1);
-	data[static_cast<int>(AircraftID::Player)].textureRect = sf::IntRect(0, 0, 48, 64);
+	data[static_cast<int>(AircraftID::Player)].textureRect = sf::IntRect(0, 0, 180, 100);
 	data[static_cast<int>(AircraftID::Player)].texture = TextureID::Player;
-	data[static_cast<int>(AircraftID::Player)].hasRollAnimation = true;
+	data[static_cast<int>(AircraftID::Player)].hasRollAnimation = false;
 
 	data[static_cast<int>(AircraftID::Player2)].hitpoints = 100;
 	data[static_cast<int>(AircraftID::Player2)].speed = 200.f;
 	data[static_cast<int>(AircraftID::Player2)].fireInterval = sf::seconds(1);
-	data[static_cast<int>(AircraftID::Player2)].textureRect = sf::IntRect(0, 0, 48, 64);
+	data[static_cast<int>(AircraftID::Player2)].textureRect = sf::IntRect(0, 0, 180, 100);
 	data[static_cast<int>(AircraftID::Player2)].texture = TextureID::Player2;
-	data[static_cast<int>(AircraftID::Player2)].hasRollAnimation = true;
+	data[static_cast<int>(AircraftID::Player2)].hasRollAnimation = false;
 
 	//data[static_cast<int>(AircraftID::Raptor)].hitpoints = 20;
 	//data[static_cast<int>(AircraftID::Raptor)].speed = 80.f;
@@ -54,10 +55,15 @@ std::vector<ProjectileData> initializeProjectileData()
 {
 	std::vector<ProjectileData> data(static_cast<int>(ProjectileID::TypeCount));
 
-	data[static_cast<int>(ProjectileID::AlliedBullet)].damage = 10;
-	data[static_cast<int>(ProjectileID::AlliedBullet)].speed = 300.f;
-	data[static_cast<int>(ProjectileID::AlliedBullet)].texture = TextureID::Entities;
-	data[static_cast<int>(ProjectileID::AlliedBullet)].textureRect = sf::IntRect(175, 64, 3, 14);
+	data[static_cast<int>(ProjectileID::Allied1Bullet)].damage = 10;
+	data[static_cast<int>(ProjectileID::Allied1Bullet)].speed = 300.f;
+	data[static_cast<int>(ProjectileID::Allied1Bullet)].texture = TextureID::Entities;
+	data[static_cast<int>(ProjectileID::Allied1Bullet)].textureRect = sf::IntRect(175, 64, 3, 14);
+
+	data[static_cast<int>(ProjectileID::Allied2Bullet)].damage = 10;
+	data[static_cast<int>(ProjectileID::Allied2Bullet)].speed = 300.f;
+	data[static_cast<int>(ProjectileID::Allied2Bullet)].texture = TextureID::Entities;
+	data[static_cast<int>(ProjectileID::Allied2Bullet)].textureRect = sf::IntRect(175, 64, 3, 14);
 
 	data[static_cast<int>(ProjectileID::EnemyBullet)].damage = 10;
 	data[static_cast<int>(ProjectileID::EnemyBullet)].speed = 300.f;

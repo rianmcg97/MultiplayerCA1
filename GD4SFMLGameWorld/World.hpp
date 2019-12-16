@@ -89,6 +89,7 @@ private:
 
 	sf::FloatRect mWorldBounds;
 	sf::Vector2f mSpawnPosition;
+	sf::Vector2f mSpawnPosition2;
 	float mScrollSpeed;
 	Aircraft* mPlayerAircraft;
 	Aircraft* mPlayer2Aircraft;

@@ -15,8 +15,9 @@ World::World(sf::RenderTarget& outputTarget, FontHolder& fonts, SoundPlayer& sou
 	, mTextures()
 	, mSceneGraph()
 	, mSceneLayers()
-	, mWorldBounds(0.f, 0.f, mCamera.getSize().x, 5000.f)
+	, mWorldBounds(0.f, 0.f, 5000.f, mCamera.getSize().x)
 	, mSpawnPosition(mCamera.getSize().x / 2.f, mWorldBounds.height - mCamera.getSize().y / 2.f)
+	, mSpawnPosition2(mCamera.getSize().x / 2.f, mWorldBounds.height - mCamera.getSize().y / 3.f)
 	, mScrollSpeed(-50.f)
 	, mPlayerAircraft(nullptr)
 	, mPlayer2Aircraft(nullptr)
@@ -255,12 +256,14 @@ void World::buildScene()
 	mPlayerAircraft = player.get();
 	mPlayerAircraft->setPosition(mSpawnPosition);
 	mPlayerAircraft->setRotation(90);
+	mPlayerAircraft->setScale(0.8, 0.8);
 	mSceneLayers[static_cast<int>(LayerID::UpperAir)]->attachChild(std::move(player));
 
 	std::unique_ptr<Aircraft> player2(new Aircraft(AircraftID::Player2, mTextures, mFonts));
 	mPlayer2Aircraft = player2.get();
-	mPlayer2Aircraft->setPosition(mSpawnPosition);
+	mPlayer2Aircraft->setPosition(mSpawnPosition2);
 	mPlayer2Aircraft->setRotation(90);
+	mPlayer2Aircraft->setScale(0.8, 0.8);
 	mSceneLayers[static_cast<int>(LayerID::UpperAir)]->attachChild(std::move(player2));
 
 	//addEnemies();
@@ -303,7 +306,7 @@ void World::adaptPlayerVelocity()
 		mPlayerAircraft->setVelocity(velocity / std::sqrt(2.f));
 
 	// Add scrolling velocity
-	mPlayerAircraft->accelerate(0.f, mScrollSpeed);
+	mPlayerAircraft->accelerate(-mScrollSpeed, 0.f);
 }
 
 void World::adaptPlayer2Velocity()
@@ -315,7 +318,7 @@ void World::adaptPlayer2Velocity()
 		mPlayer2Aircraft->setVelocity(velocity / std::sqrt(2.f));
 
 	// Add scrolling velocity
-	mPlayer2Aircraft->accelerate(0.f, mScrollSpeed);
+	mPlayer2Aircraft->accelerate(-mScrollSpeed, 0.f);
 }
 
 //void World::addEnemies()

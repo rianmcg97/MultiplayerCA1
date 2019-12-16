@@ -96,6 +96,13 @@ Aircraft::Aircraft(AircraftID type, const TextureHolder& textures, const FontHol
 		attachChild(std::move(missileDisplay));
 	}
 
+	if (getCategory() == (static_cast<int>(CategoryID::Player2Aircraft)))
+	{
+		std::unique_ptr<TextNode> missileDisplay(new TextNode(fonts, ""));
+		missileDisplay->setPosition(0, 70);
+		mMissileDisplay = missileDisplay.get();
+		attachChild(std::move(missileDisplay));
+	}
 	updateTexts();
 }
 
@@ -115,7 +122,7 @@ void Aircraft::updateCurrent(sf::Time dt, CommandQueue& commands)
 	{
 		checkPickupDrop(commands);
 		mExplosion.update(dt);
-		//mIsMarkedForRemoval = true;
+		mIsMarkedForRemoval = true;
 		//Play explosion sound
 		if (!mPlayedExplosionSound)
 		{
@@ -136,14 +143,16 @@ void Aircraft::updateCurrent(sf::Time dt, CommandQueue& commands)
 
 	// Update texts
 	updateTexts();
-	updateRollAnimation();
+	//updateRollAnimation();
 }
 
 
 unsigned int Aircraft::getCategory() const
 {
-	if (isAllied())
+	if (isAllied1())
 		return static_cast<int>(CategoryID::PlayerAircraft);
+	else if (isAllied2())
+		return static_cast<int>(CategoryID::Player2Aircraft);
 	else
 		return static_cast<int>(CategoryID::EnemyAircraft);
 }
@@ -158,7 +167,12 @@ bool Aircraft::isMarkedForRemoval() const
 	return isDestroyed() && (mExplosion.isFinished() || !mShowExplosion);
 }
 
-bool Aircraft::isAllied() const
+bool Aircraft::isAllied1() const
+{
+	return mType == AircraftID::Player;
+}
+
+bool Aircraft::isAllied2() const
 {
 	return mType == AircraftID::Player2;
 }
@@ -241,7 +255,7 @@ void Aircraft::updateMovementPattern(sf::Time dt)
 
 void Aircraft::checkPickupDrop(CommandQueue& commands)
 {
-	if (!isAllied() && randomInt(3) == 0 && !mSpawnedPickup)
+	if (!isAllied1() || !isAllied2() && randomInt(3) == 0 && !mSpawnedPickup)
 		commands.push(mDropPickupCommand);
 	mSpawnedPickup = true;
 }
@@ -249,7 +263,7 @@ void Aircraft::checkPickupDrop(CommandQueue& commands)
 void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands)
 {
 	// Enemies try to fire all the time
-	if (!isAllied())
+	if (!isAllied1() || !isAllied2())
 		fire();
 
 	// Check for automatic gunfire, allow only in intervals
@@ -257,7 +271,8 @@ void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands)
 	{
 		// Interval expired: We can fire a new bullet
 		commands.push(mFireCommand);
-		playerLocalSound(commands, isAllied() ? SoundEffectID::AlliedGunfire : SoundEffectID::EnemyGunfire);
+		playerLocalSound(commands, isAllied1() || isAllied2() ? SoundEffectID::AlliedGunfire : SoundEffectID::EnemyGunfire);
+		
 		mFireCountdown += Table[static_cast<int>(mType)].fireInterval / (mFireRateLevel + 1.f);
 		mIsFiring = false;
 	}
@@ -279,8 +294,8 @@ void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands)
 
 void Aircraft::createBullets(SceneNode& node, const TextureHolder& textures) const
 {
-	ProjectileID type = isAllied() ? ProjectileID::AlliedBullet : ProjectileID::EnemyBullet;
-
+	ProjectileID type = isAllied1() ? ProjectileID::Allied1Bullet : ProjectileID::EnemyBullet;
+	//ProjectileID type = isAllied2() ? ProjectileID::Allied2Bullet : ProjectileID::EnemyBullet;
 	switch (mSpreadLevel)
 	{
 	case 1:
@@ -307,10 +322,11 @@ void Aircraft::createProjectile(SceneNode& node, ProjectileID type, float xOffse
 	sf::Vector2f offset(xOffset * mSprite.getGlobalBounds().width, yOffset * mSprite.getGlobalBounds().height);
 	sf::Vector2f velocity(0, projectile->getMaxSpeed());
 
-	float sign = isAllied() ? -1.f : +1.f;
-	projectile->setPosition(getWorldPosition() + offset * sign);
-	projectile->setVelocity(velocity * sign);
+	float sign1 = isAllied1() ? -1.f : +1.f;
+	projectile->setPosition(getWorldPosition() + offset * sign1);
+	projectile->setVelocity(velocity * sign1);
 	node.attachChild(std::move(projectile));
+
 }
 
 void Aircraft::createPickup(SceneNode& node, const TextureHolder& textures) const
@@ -338,20 +354,20 @@ void Aircraft::updateTexts()
 	}
 }
 
-void Aircraft::updateRollAnimation()
-{
-	if (Table[static_cast<int>(mType)].hasRollAnimation)
-	{
-		sf::IntRect textureRect = Table[static_cast<int>(mType)].textureRect;
-
-		// Roll left: Texture rect offset once
-		if (getVelocity().x < 0.f)
-			textureRect.left += textureRect.width;
-
-		// Roll right: Texture rect offset twice
-		else if (getVelocity().x > 0.f)
-			textureRect.left += 2 * textureRect.width;
-
-		mSprite.setTextureRect(textureRect);
-	}
-}
+//void Aircraft::updateRollAnimation()
+//{
+//	if (Table[static_cast<int>(mType)].hasRollAnimation)
+//	{
+//		sf::IntRect textureRect = Table[static_cast<int>(mType)].textureRect;
+//
+//		// Roll left: Texture rect offset once
+//		if (getVelocity().x < 0.f)
+//			textureRect.left += textureRect.width;
+//
+//		// Roll right: Texture rect offset twice
+//		else if (getVelocity().x > 0.f)
+//			textureRect.left += 2 * textureRect.width;
+//
+//		mSprite.setTextureRect(textureRect);
+//	}
+//}
