@@ -55,15 +55,10 @@ std::vector<ProjectileData> initializeProjectileData()
 {
 	std::vector<ProjectileData> data(static_cast<int>(ProjectileID::TypeCount));
 
-	data[static_cast<int>(ProjectileID::Allied1Bullet)].damage = 10;
-	data[static_cast<int>(ProjectileID::Allied1Bullet)].speed = 300.f;
-	data[static_cast<int>(ProjectileID::Allied1Bullet)].texture = TextureID::Entities;
-	data[static_cast<int>(ProjectileID::Allied1Bullet)].textureRect = sf::IntRect(175, 64, 3, 14);
-
-	data[static_cast<int>(ProjectileID::Allied2Bullet)].damage = 10;
-	data[static_cast<int>(ProjectileID::Allied2Bullet)].speed = 300.f;
-	data[static_cast<int>(ProjectileID::Allied2Bullet)].texture = TextureID::Entities;
-	data[static_cast<int>(ProjectileID::Allied2Bullet)].textureRect = sf::IntRect(175, 64, 3, 14);
+	data[static_cast<int>(ProjectileID::AlliedBullet)].damage = 10;
+	data[static_cast<int>(ProjectileID::AlliedBullet)].speed = 300.f;
+	data[static_cast<int>(ProjectileID::AlliedBullet)].texture = TextureID::Entities;
+	data[static_cast<int>(ProjectileID::AlliedBullet)].textureRect = sf::IntRect(175, 64, 3, 14);
 
 	data[static_cast<int>(ProjectileID::EnemyBullet)].damage = 10;
 	data[static_cast<int>(ProjectileID::EnemyBullet)].speed = 300.f;

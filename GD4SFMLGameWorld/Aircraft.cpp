@@ -120,7 +120,7 @@ void Aircraft::updateCurrent(sf::Time dt, CommandQueue& commands)
 	// Entity has been destroyed: Possibly drop pickup, mark for removal
 	if (isDestroyed())
 	{
-		checkPickupDrop(commands);
+		//checkPickupDrop(commands);
 		mExplosion.update(dt);
 		mIsMarkedForRemoval = true;
 		//Play explosion sound
@@ -253,12 +253,12 @@ void Aircraft::updateMovementPattern(sf::Time dt)
 	}
 }
 
-void Aircraft::checkPickupDrop(CommandQueue& commands)
-{
-	if (!isAllied1() || !isAllied2() && randomInt(3) == 0 && !mSpawnedPickup)
-		commands.push(mDropPickupCommand);
-	mSpawnedPickup = true;
-}
+//void Aircraft::checkPickupDrop(CommandQueue& commands)
+//{
+//	if (!isAllied1() || !isAllied2() && randomInt(3) == 0 && !mSpawnedPickup)
+//		commands.push(mDropPickupCommand);
+//	mSpawnedPickup = true;
+//}
 
 void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands)
 {
@@ -294,8 +294,8 @@ void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands)
 
 void Aircraft::createBullets(SceneNode& node, const TextureHolder& textures) const
 {
-	ProjectileID type = isAllied1() ? ProjectileID::Allied1Bullet : ProjectileID::EnemyBullet;
-	//ProjectileID type = isAllied2() ? ProjectileID::Allied2Bullet : ProjectileID::EnemyBullet;
+	ProjectileID type = isAllied1() || isAllied2() ? ProjectileID::AlliedBullet : ProjectileID::EnemyBullet;
+	
 	switch (mSpreadLevel)
 	{
 	case 1:
