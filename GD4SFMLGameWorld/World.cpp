@@ -256,10 +256,10 @@ void World::buildScene()
 	mPlayerAircraft = player.get();
 	mPlayerAircraft->setPosition(mSpawnPosition + sf::Vector2f(-50, -50));
 	mPlayerAircraft->setRotation(90);
-	mPlayerAircraft->setScale(0.8, 0.8);
+	mPlayerAircraft->setScale(0.8f, 0.8f);
 	mSceneLayers[static_cast<int>(LayerID::UpperAir)]->attachChild(std::move(player));
 
-	std::unique_ptr<Aircraft> player2(new Aircraft(AircraftID::Player2, mTextures, mFonts));
+	std::unique_ptr<Aircraft> player2(new Aircraft(AircraftID::Player, mTextures, mFonts));
 	mPlayer2Aircraft = player2.get();
 	mPlayer2Aircraft->setPosition(mSpawnPosition2);
 	mPlayer2Aircraft->setRotation(90);
