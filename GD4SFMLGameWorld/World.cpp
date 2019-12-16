@@ -254,7 +254,7 @@ void World::buildScene()
 	// Add player's aircraft
 	std::unique_ptr<Aircraft> player(new Aircraft(AircraftID::Player, mTextures, mFonts));
 	mPlayerAircraft = player.get();
-	mPlayerAircraft->setPosition(mSpawnPosition);
+	mPlayerAircraft->setPosition(mSpawnPosition + sf::Vector2f(-50, -50));
 	mPlayerAircraft->setRotation(90);
 	mPlayerAircraft->setScale(0.8, 0.8);
 	mSceneLayers[static_cast<int>(LayerID::UpperAir)]->attachChild(std::move(player));
