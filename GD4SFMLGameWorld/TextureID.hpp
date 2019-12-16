@@ -2,6 +2,7 @@
 enum class TextureID
 {
 	Entities,
+	Enemy,
 	Player,
 	Player2,
 	Space,

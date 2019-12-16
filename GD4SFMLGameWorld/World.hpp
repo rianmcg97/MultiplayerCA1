@@ -50,10 +50,9 @@ private:
 	void adaptPlayer2Velocity();
 	void handleCollisions();
 
-	/*void spawnEnemies();
+	void spawnEnemies();
 	void addEnemies();
-	void 
-	(AircraftID type, float relX, float relY);*/
+	void addEnemy(AircraftID type, float relX, float relY);
 
 	sf::FloatRect getBattlefieldBounds() const;
 	sf::FloatRect getViewBounds() const;
