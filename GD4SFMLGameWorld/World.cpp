@@ -261,7 +261,7 @@ void World::buildScene()
 	mPlayerAircraft->setScale(0.8f, 0.8f);
 	mSceneLayers[static_cast<int>(LayerID::UpperAir)]->attachChild(std::move(player));
 
-	std::unique_ptr<Aircraft> player2(new Aircraft(AircraftID::Player, mTextures, mFonts));
+	std::unique_ptr<Aircraft> player2(new Aircraft(AircraftID::Player2, mTextures, mFonts));
 	mPlayer2Aircraft = player2.get();
 	mPlayer2Aircraft->setPosition(mSpawnPosition2 + sf::Vector2f(50, 50));
 	mPlayer2Aircraft->setRotation(90);
