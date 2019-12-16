@@ -35,7 +35,7 @@ private:
 
 	void checkProjectileLaunch(sf::Time dt, CommandQueue& commands);
 
-	void createBullets(SceneNode& node, const TextureHolder& textures) const;
+	void createBullets(SceneNode& node, const TextureHolder& textures);
 	void createProjectile(SceneNode& node, ProjectileID type, float xOffset, float yOffset, const TextureHolder& textures) const;
 
 	void createPickup(SceneNode& node, const TextureHolder& textures) const;

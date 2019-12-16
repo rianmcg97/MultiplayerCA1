@@ -27,7 +27,7 @@ std::vector<AircraftData> initializeAircraftData()
 
 	data[static_cast<int>(AircraftID::Enemy)].hitpoints = 200;
 	//data[static_cast<int>(AircraftID::Enemy)].speed = 80.f;
-	data[static_cast<int>(AircraftID::Enemy)].fireInterval = sf::Time::Zero;
+	data[static_cast<int>(AircraftID::Enemy)].fireInterval = sf::seconds(1);
 	data[static_cast<int>(AircraftID::Enemy)].texture = TextureID::Enemy;
 	data[static_cast<int>(AircraftID::Enemy)].textureRect = sf::IntRect(0, 0, 230, 366);
 
@@ -61,12 +61,12 @@ std::vector<ProjectileData> initializeProjectileData()
 	data[static_cast<int>(ProjectileID::AlliedBullet)].textureRect = sf::IntRect(175, 64, 3, 14);
 
 	data[static_cast<int>(ProjectileID::EnemyBullet)].damage = 10;
-	data[static_cast<int>(ProjectileID::EnemyBullet)].speed = 300.f;
+	data[static_cast<int>(ProjectileID::EnemyBullet)].speed = -300.f;
 	data[static_cast<int>(ProjectileID::EnemyBullet)].texture = TextureID::Entities;
 	data[static_cast<int>(ProjectileID::EnemyBullet)].textureRect = sf::IntRect(175, 64, 3, 14);
 
 
-	data[static_cast<int>(ProjectileID::Missile)].damage = 200;
+	data[static_cast<int>(ProjectileID::Missile)].damage = 20;
 	data[static_cast<int>(ProjectileID::Missile)].speed = 250.f;
 	data[static_cast<int>(ProjectileID::Missile)].texture = TextureID::Entities;
 	data[static_cast<int>(ProjectileID::Missile)].textureRect = sf::IntRect(160, 64, 15, 32);

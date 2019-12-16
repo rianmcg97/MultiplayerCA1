@@ -298,8 +298,9 @@ void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands)
 	}
 }
 
-void Aircraft::createBullets(SceneNode& node, const TextureHolder& textures) const
+void Aircraft::createBullets(SceneNode& node, const TextureHolder& textures) 
 {
+	
 	ProjectileID type = isAlliedPlayer1() || isAlliedPlayer2() ? ProjectileID::AlliedBullet : ProjectileID::EnemyBullet;
 	switch (mSpreadLevel)
 	{
@@ -317,6 +318,18 @@ void Aircraft::createBullets(SceneNode& node, const TextureHolder& textures) con
 		createProjectile(node, type, 0.0f, 0.01f, textures);
 		createProjectile(node, type, +0.5f, 0.01f, textures);
 		break;
+	}
+	//Eoghan
+	//If you're the boss
+	if (!isAlliedPlayer()) {
+		//And you're under 180 hitpoints
+		if(this->getHitpoints() < 180 && this->getHitpoints() > 100 && mSpreadLevel== 1){
+			increaseSpread();
+		}
+
+		if (this->getHitpoints() <= 100 && mSpreadLevel == 2) {
+			increaseSpread();
+		}
 	}
 }
 
