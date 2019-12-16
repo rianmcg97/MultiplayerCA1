@@ -1,7 +1,7 @@
 #pragma once
 enum class SoundEffectID
 {
-	AlliedGunfire,
+	AlliedLasers,
 	EnemyGunfire,
 	Explosion1,
 	Explosion2,

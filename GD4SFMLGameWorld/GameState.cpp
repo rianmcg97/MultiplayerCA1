@@ -1,3 +1,5 @@
+//Eoghan - D00187992
+
 #include "GameState.hpp"
 
 GameState::GameState(StateStack& stack, Context context)
@@ -43,6 +45,8 @@ bool GameState::update(sf::Time dt)
 
 	return true;
 }
+
+
 
 bool GameState::handleEvent(const sf::Event& event)
 {

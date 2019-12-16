@@ -16,7 +16,7 @@ SoundPlayer::SoundPlayer()
 	:mSoundsBuffer()
 	, mSounds()
 {
-	mSoundsBuffer.load(SoundEffectID::AlliedGunfire, "Media/Sound/AlliedGunfire.wav");
+	mSoundsBuffer.load(SoundEffectID::AlliedLasers, "Media/Sound/LaserShot.wav");
 	mSoundsBuffer.load(SoundEffectID::EnemyGunfire, "Media/Sound/EnemyGunfire.wav");
 	mSoundsBuffer.load(SoundEffectID::Explosion1, "Media/Sound/Explosion1.wav");
 	mSoundsBuffer.load(SoundEffectID::Explosion2, "Media/Sound/Explosion2.wav");
