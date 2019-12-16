@@ -294,7 +294,7 @@ void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands)
 
 void Aircraft::createBullets(SceneNode& node, const TextureHolder& textures) const
 {
-	ProjectileID type = isAllied1() ? ProjectileID::Allied1Bullet : ProjectileID::EnemyBullet;
+	ProjectileID type = isAllied1() || isAllied2() ? ProjectileID::AlliedBullet : ProjectileID::EnemyBullet;
 	//ProjectileID type = isAllied2() ? ProjectileID::Allied2Bullet : ProjectileID::EnemyBullet;
 	switch (mSpreadLevel)
 	{
