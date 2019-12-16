@@ -25,7 +25,7 @@ std::vector<AircraftData> initializeAircraftData()
 	data[static_cast<int>(AircraftID::Player2)].texture = TextureID::Player2;
 	data[static_cast<int>(AircraftID::Player2)].hasRollAnimation = false;
 
-	data[static_cast<int>(AircraftID::Enemy)].hitpoints = 20;
+	data[static_cast<int>(AircraftID::Enemy)].hitpoints = 200;
 	//data[static_cast<int>(AircraftID::Enemy)].speed = 80.f;
 	data[static_cast<int>(AircraftID::Enemy)].fireInterval = sf::Time::Zero;
 	data[static_cast<int>(AircraftID::Enemy)].texture = TextureID::Enemy;

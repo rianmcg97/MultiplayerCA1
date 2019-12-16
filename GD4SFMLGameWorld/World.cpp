@@ -327,7 +327,7 @@ void World::adaptPlayer2Velocity()
 void World::addEnemies()
 {
 //	// Add enemies to the spawn point container
-	addEnemy(AircraftID::Enemy, 500.f, 0.f);
+	addEnemy(AircraftID::Enemy, 300.f, 0.f);
 //	addEnemy(AircraftID::Raptor, 0.f, 1000.f);
 //	addEnemy(AircraftID::Raptor, +100.f, 1150.f);
 //	addEnemy(AircraftID::Raptor, -100.f, 1150.f);
@@ -377,7 +377,9 @@ void World::spawnEnemies()
 
 		std::unique_ptr<Aircraft> enemy(new Aircraft(spawn.type, mTextures, mFonts));
 		enemy->setPosition(spawn.x, spawn.y);
-		enemy->setRotation(180.f);
+		enemy->setRotation(270.f);
+		enemy->setVelocity(-mScrollSpeed, 0.f);
+		
 
 		mSceneLayers[static_cast<int>(LayerID::UpperAir)]->attachChild(std::move(enemy));
 
