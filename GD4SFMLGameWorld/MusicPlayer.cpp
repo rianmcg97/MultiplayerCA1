@@ -1,4 +1,8 @@
+//Eoghan - D00187992
+
 #include "MusicPlayer.hpp"
+
+
 
 MusicPlayer::MusicPlayer()
 	: mMusic()

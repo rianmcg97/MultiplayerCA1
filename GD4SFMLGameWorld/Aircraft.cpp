@@ -1,3 +1,5 @@
+
+//Eoghan D00187992
 #include "Aircraft.hpp"
 #include "ResourceHolder.hpp"
 #include "DataTables.hpp"
@@ -271,7 +273,7 @@ void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands)
 	{
 		// Interval expired: We can fire a new bullet
 		commands.push(mFireCommand);
-		playerLocalSound(commands, isAllied1() || isAllied2() ? SoundEffectID::AlliedGunfire : SoundEffectID::EnemyGunfire);
+		playerLocalSound(commands, isAllied1() || isAllied2() ? SoundEffectID::AlliedLasers : SoundEffectID::EnemyGunfire);
 		
 		mFireCountdown += Table[static_cast<int>(mType)].fireInterval / (mFireRateLevel + 1.f);
 		mIsFiring = false;
@@ -291,6 +293,8 @@ void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands)
 		mIsLaunchingMissile = false;
 	}
 }
+
+
 
 void Aircraft::createBullets(SceneNode& node, const TextureHolder& textures) const
 {
