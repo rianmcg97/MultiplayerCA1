@@ -151,9 +151,9 @@ void Aircraft::updateCurrent(sf::Time dt, CommandQueue& commands)
 
 unsigned int Aircraft::getCategory() const
 {
-	if (isAllied1())
+	if (isAlliedPlayer1())
 		return static_cast<int>(CategoryID::PlayerAircraft);
-	else if (isAllied2())
+	else if (isAlliedPlayer2())
 		return static_cast<int>(CategoryID::Player2Aircraft);
 	else
 		return static_cast<int>(CategoryID::EnemyAircraft);
@@ -169,12 +169,16 @@ bool Aircraft::isMarkedForRemoval() const
 	return isDestroyed() && (mExplosion.isFinished() || !mShowExplosion);
 }
 
-bool Aircraft::isAllied1() const
+bool Aircraft::isAlliedPlayer1() const
 {
 	return mType == AircraftID::Player;
 }
 
-bool Aircraft::isAllied2() const
+bool Aircraft::isAlliedPlayer() const {
+	return mType == AircraftID::Player || mType == AircraftID::Player2;
+}
+
+bool Aircraft::isAlliedPlayer2() const
 {
 	return mType == AircraftID::Player2;
 }
@@ -265,7 +269,8 @@ void Aircraft::updateMovementPattern(sf::Time dt)
 void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands)
 {
 	// Enemies try to fire all the time
-	if (!isAllied1() || !isAllied2())
+	//Checks both whether its player one or player two - Eoghan
+	if (!isAlliedPlayer())
 		fire();
 
 	// Check for automatic gunfire, allow only in intervals
@@ -273,7 +278,7 @@ void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands)
 	{
 		// Interval expired: We can fire a new bullet
 		commands.push(mFireCommand);
-		playerLocalSound(commands, isAllied1() || isAllied2() ? SoundEffectID::AlliedLasers : SoundEffectID::EnemyGunfire);
+		playerLocalSound(commands, isAlliedPlayer() ? SoundEffectID::AlliedLasers : SoundEffectID::EnemyGunfire);
 		
 		mFireCountdown += Table[static_cast<int>(mType)].fireInterval / (mFireRateLevel + 1.f);
 		mIsFiring = false;
@@ -298,7 +303,7 @@ void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands)
 
 void Aircraft::createBullets(SceneNode& node, const TextureHolder& textures) const
 {
-	ProjectileID type = isAllied1() || isAllied2() ? ProjectileID::AlliedBullet : ProjectileID::EnemyBullet;
+	ProjectileID type = isAlliedPlayer1() || isAlliedPlayer2() ? ProjectileID::AlliedBullet : ProjectileID::EnemyBullet;
 	switch (mSpreadLevel)
 	{
 	case 1:
@@ -325,7 +330,7 @@ void Aircraft::createProjectile(SceneNode& node, ProjectileID type, float xOffse
 	sf::Vector2f offset(xOffset * mSprite.getGlobalBounds().width, yOffset * mSprite.getGlobalBounds().height);
 	sf::Vector2f velocity(0, projectile->getMaxSpeed());
 
-	float sign1 = isAllied1() ? -1.f : +1.f;
+	float sign1 = isAlliedPlayer1() ? -1.f : +1.f;
 	projectile->setPosition(getWorldPosition() + offset * sign1);
 	projectile->setVelocity(velocity * sign1);
 	node.attachChild(std::move(projectile));
