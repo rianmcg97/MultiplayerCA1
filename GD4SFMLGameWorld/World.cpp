@@ -39,7 +39,7 @@ void World::update(sf::Time dt)
 	mPlayerAircraft->setVelocity(-mScrollSpeed * dt.asSeconds(), 0.f);
 	mPlayer2Aircraft->setVelocity(-mScrollSpeed * dt.asSeconds(), 0.f);
 	// Setup commands to destroy entities, and guide missiles
-	//destroyEntitiesOutsideView();
+	destroyEntitiesOutsideView();
 	//guideMissiles();
 
 	// Forward commands to scene graph, adapt velocity (scrolling, diagonal correction)
