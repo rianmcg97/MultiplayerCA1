@@ -7,6 +7,8 @@
 #include "PickupID.hpp"
 #include "ParticleID.hpp"
 
+//Eoghan - D00187992
+
 std::vector<AircraftData> initializeAircraftData()
 {
 	std::vector<AircraftData> data(static_cast<int>(AircraftID::TypeCount));
@@ -26,14 +28,21 @@ std::vector<AircraftData> initializeAircraftData()
 	data[static_cast<int>(AircraftID::Player2)].hasRollAnimation = false;
 
 	data[static_cast<int>(AircraftID::Enemy)].hitpoints = 200;
-	//data[static_cast<int>(AircraftID::Enemy)].speed = 80.f;
-	data[static_cast<int>(AircraftID::Enemy)].fireInterval = sf::seconds(1);
+	data[static_cast<int>(AircraftID::Enemy)].speed = 80.f;
+	data[static_cast<int>(AircraftID::Enemy)].fireInterval = sf::seconds(2);
 	data[static_cast<int>(AircraftID::Enemy)].texture = TextureID::Enemy;
 	data[static_cast<int>(AircraftID::Enemy)].textureRect = sf::IntRect(0, 0, 230, 366);
 
-	//data[static_cast<int>(AircraftID::Raptor)].directions.push_back(Direction(+45.f, 80.f));
-	//data[static_cast<int>(AircraftID::Raptor)].directions.push_back(Direction(-45.f, 160.f));
-	//data[static_cast<int>(AircraftID::Raptor)].directions.push_back(Direction(+45.f, 80.f));
+	data[static_cast<int>(AircraftID::Enemy)].directions.push_back(Direction(+179.f, 100.f));
+	data[static_cast<int>(AircraftID::Enemy)].directions.push_back(Direction(+359.f, 100.f));
+	data[static_cast<int>(AircraftID::Enemy)].directions.push_back(Direction(+179.f, 100.f));
+	data[static_cast<int>(AircraftID::Enemy)].directions.push_back(Direction(+359.f, 100.f));
+	data[static_cast<int>(AircraftID::Enemy)].directions.push_back(Direction(+90.f, 50.f));
+	data[static_cast<int>(AircraftID::Enemy)].directions.push_back(Direction(-90.f, 200.f));
+	data[static_cast<int>(AircraftID::Enemy)].directions.push_back(Direction(+359.f, 50.f));
+	data[static_cast<int>(AircraftID::Enemy)].directions.push_back(Direction(+179.f, 50.f));
+	data[static_cast<int>(AircraftID::Enemy)].directions.push_back(Direction(-90.f, 800.f));
+	//data[static_cast<int>(AircraftID::Enemy)].directions.push_back(Direction(-160.f, 50.f));
 	//data[static_cast<int>(AircraftID::Raptor)].hasRollAnimation = false;
 
 	//data[static_cast<int>(AircraftID::Avenger)].hitpoints = 40;
